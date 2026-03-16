@@ -1,4 +1,4 @@
-# Basic File System
+# Filesystem in FUSE
 
 This is a simple filesystem developed in C using FUSE. This project is developed to understand how to implement filesystem operations.
 
