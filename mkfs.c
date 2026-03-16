@@ -1,16 +1,8 @@
-#include "wfs.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <time.h>
-#include <fcntl.h>
-
+#include "bfs.h"
 
 int main (int argc, char *argv[]) {
 
-  struct wfs_sb *superblock = malloc(sizeof(struct wfs_sb));
+  struct bfs_sb *superblock = malloc(sizeof(struct bfs_sb));
   if(superblock == 0)
     return -1;
 
@@ -115,7 +107,7 @@ int main (int argc, char *argv[]) {
     return 1; 
   
 
-  struct wfs_inode *root_inode = malloc(sizeof(struct wfs_inode));
+  struct bfs_inode *root_inode = malloc(sizeof(struct bfs_inode));
   if(root_inode == 0)
     return -1;
   root_inode->num = 0;
@@ -149,15 +141,15 @@ int main (int argc, char *argv[]) {
     int ibitmap_size = superblock->num_inodes / 8;
     int dbitmap_size = superblock->num_data_blocks / 8;
 
-    size_limit += sizeof(struct wfs_sb) + ibitmap_size + dbitmap_size;
+    size_limit += sizeof(struct bfs_sb) + ibitmap_size + dbitmap_size;
 
     if(curr_disk.st_size < size_limit)
       return -1;
 
-    lseek(fd[i], sizeof(struct wfs_sb), SEEK_SET);
+    lseek(fd[i], sizeof(struct bfs_sb), SEEK_SET);
     
     lseek(fd[i], 0, SEEK_SET);
-    superblock->i_bitmap_ptr = lseek(fd[i], sizeof(struct wfs_sb), SEEK_CUR);
+    superblock->i_bitmap_ptr = lseek(fd[i], sizeof(struct bfs_sb), SEEK_CUR);
 
     char num = 0;
     for(int j = 0; j < ibitmap_size; j++) {
@@ -214,7 +206,7 @@ int main (int argc, char *argv[]) {
     write(fd[i], &num, 1);
     
     lseek(fd[i], 0, SEEK_SET);
-    write(fd[i], superblock, sizeof(struct wfs_sb));
+    write(fd[i], superblock, sizeof(struct bfs_sb));
     lseek(fd[i], 0, SEEK_SET);
 
   }
